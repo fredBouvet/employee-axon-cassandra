@@ -3,8 +3,7 @@ package fr.fbouvet.employee.infrastructure.query;
 import static java.util.stream.Collectors.toList;
 
 import fr.fbouvet.employee.api.query.model.EmployeeView;
-import fr.fbouvet.employee.domain.query.projectors.EmployeeViewProjectorRepository;
-import fr.fbouvet.employee.domain.query.queryhandlers.EmployeeViewQueryRepository;
+import fr.fbouvet.employee.domain.query.EmployeeViewRepository;
 import fr.fbouvet.employee.infrastructure.query.byid.EmployeeById;
 import fr.fbouvet.employee.infrastructure.query.byid.EmployeeByIdRepository;
 import fr.fbouvet.employee.infrastructure.query.byname.EmployeeByName;
@@ -18,8 +17,7 @@ import org.springframework.stereotype.Repository;
 
 @AllArgsConstructor
 @Repository
-public class EmployeeViewRepository implements EmployeeViewQueryRepository,
-    EmployeeViewProjectorRepository {
+public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
 
   private final EmployeeByIdRepository repositoryById;
   private final EmployeeByNameRepository repositoryByName;

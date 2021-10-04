@@ -1,0 +1,16 @@
+version: "3.4"
+services:
+#AxonServer     
+  axon:
+   container_name: axon
+   image: axoniq/axonserver:latest
+   ports:
+     - "8024:8024"
+     - "8124:8124"
+#Cassandra
+  cassandra:
+   container_name: cassandra
+   image: cassandra:latest
+   ports:
+     - "9042:9042"
+   

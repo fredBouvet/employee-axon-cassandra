@@ -14,5 +14,4 @@ public class EmployeeView {
   String address;
   String email;
   LocalDate birthDate;
-
 }
