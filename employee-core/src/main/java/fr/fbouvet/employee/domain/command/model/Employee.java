@@ -18,7 +18,8 @@ import org.axonframework.spring.stereotype.Aggregate;
 public class Employee {
 
   private static final Pattern RFC_5322 = compile(
-      "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
+      "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"
+  );
 
   @AggregateIdentifier
   private UUID id;
