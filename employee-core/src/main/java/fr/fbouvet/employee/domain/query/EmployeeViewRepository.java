@@ -9,6 +9,8 @@ public interface EmployeeViewRepository {
 
   void insertEmployee(EmployeeView employeeView);
 
+  void changeName(UUID id, String previousName, String name);
+
   Optional<EmployeeView> findById(UUID id);
 
   List<EmployeeView> findByName(String name);

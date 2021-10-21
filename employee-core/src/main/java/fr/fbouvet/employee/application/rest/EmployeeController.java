@@ -5,10 +5,12 @@ import static java.util.stream.Collectors.toList;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.instanceOf;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.multipleInstancesOf;
 
+import fr.fbouvet.employee.api.command.ChangeEmployeeNameCommand;
 import fr.fbouvet.employee.api.command.CreateEmployeeCommand;
 import fr.fbouvet.employee.api.query.FindEmployeeByIdQuery;
 import fr.fbouvet.employee.api.query.FindEmployeeByNameQuery;
 import fr.fbouvet.employee.api.query.model.EmployeeView;
+import fr.fbouvet.employee.application.rest.dto.EmployeeChangeNameDto;
 import fr.fbouvet.employee.application.rest.dto.EmployeeCreationDto;
 import fr.fbouvet.employee.application.rest.dto.EmployeeDto;
 import java.util.List;
@@ -19,6 +21,7 @@ import org.axonframework.extensions.reactor.queryhandling.gateway.ReactorQueryGa
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +45,20 @@ public class EmployeeController {
             .address(employeeCreationDto.getAddress())
             .email(employeeCreationDto.getEmail())
             .birthDate(employeeCreationDto.getBirthDate())
+            .build()
+    );
+  }
+
+  @PutMapping(value = "/{id}/name")
+  public Mono<Void> changeEmployeeName(
+      @PathVariable(name = "id") UUID id,
+      @RequestBody EmployeeChangeNameDto changeNameDto
+  ) {
+
+    return commandGateway.send(
+        ChangeEmployeeNameCommand.builder()
+            .id(id)
+            .name(changeNameDto.getName())
             .build()
     );
   }

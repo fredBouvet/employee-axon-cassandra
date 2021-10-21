@@ -29,6 +29,30 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
   }
 
   @Override
+  public void changeName(UUID id, String previousName, String name) {
+
+    repositoryById.insert(EmployeeById.builder().id(id).name(name).build());
+
+    repositoryByName.findById(
+        EmployeeKeyByName.builder()
+            .id(id)
+            .name(previousName)
+            .build()
+    ).ifPresent(employeeByName -> {
+          repositoryByName.delete(employeeByName);
+          repositoryByName.insert(
+              EmployeeByName.builder()
+                  .key(EmployeeKeyByName.builder().id(id).name(name).build())
+                  .address(employeeByName.getAddress())
+                  .email(employeeByName.getEmail())
+                  .birthDate(employeeByName.getBirthDate())
+                  .build()
+          );
+        }
+    );
+  }
+
+  @Override
   public Optional<EmployeeView> findById(UUID id) {
     return repositoryById.findById(id).map(this::toView);
   }

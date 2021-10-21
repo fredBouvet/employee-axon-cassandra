@@ -8,7 +8,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 @Table("employee_by_name")
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class EmployeeByName {
 
   @PrimaryKey
