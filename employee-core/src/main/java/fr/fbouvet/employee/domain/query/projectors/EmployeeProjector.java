@@ -30,7 +30,6 @@ public class EmployeeProjector {
 
   @EventHandler
   public void onNameChanged(EmployeeNameChangedEvent event) {
-
-    repository.changeName(event.getId(), event.getPreviousName(), event.getName());
+    repository.changeName(event.getId(), event.getName());
   }
 }

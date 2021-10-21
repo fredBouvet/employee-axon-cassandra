@@ -1,5 +1,6 @@
 package fr.fbouvet.employee.domain.query.queryhandlers;
 
+import fr.fbouvet.employee.api.query.FindEmployeeByBirthDateQuery;
 import fr.fbouvet.employee.api.query.FindEmployeeByIdQuery;
 import fr.fbouvet.employee.api.query.FindEmployeeByNameQuery;
 import fr.fbouvet.employee.api.query.model.EmployeeView;
@@ -14,15 +15,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmployeeQueryHandlers {
 
-  private final EmployeeViewRepository employeeViewRepository;
+  private final EmployeeViewRepository repository;
 
   @QueryHandler
   public Optional<EmployeeView> findById(FindEmployeeByIdQuery query) {
-    return employeeViewRepository.findById(query.getId());
+    return repository.findById(query.getId());
   }
 
   @QueryHandler
   public List<EmployeeView> findByName(FindEmployeeByNameQuery query) {
-    return employeeViewRepository.findByName(query.getName());
+    return repository.findByName(query.getName());
   }
+
+  @QueryHandler
+  public List<EmployeeView> findByBirthDate(FindEmployeeByBirthDateQuery query) {
+    return repository.findByBirthDate(query.getBirthDate());
+  }
+
 }

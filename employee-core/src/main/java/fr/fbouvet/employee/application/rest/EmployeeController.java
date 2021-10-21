@@ -4,20 +4,24 @@ import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.instanceOf;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.multipleInstancesOf;
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 
 import fr.fbouvet.employee.api.command.ChangeEmployeeNameCommand;
 import fr.fbouvet.employee.api.command.CreateEmployeeCommand;
+import fr.fbouvet.employee.api.query.FindEmployeeByBirthDateQuery;
 import fr.fbouvet.employee.api.query.FindEmployeeByIdQuery;
 import fr.fbouvet.employee.api.query.FindEmployeeByNameQuery;
 import fr.fbouvet.employee.api.query.model.EmployeeView;
 import fr.fbouvet.employee.application.rest.dto.EmployeeChangeNameDto;
 import fr.fbouvet.employee.application.rest.dto.EmployeeCreationDto;
 import fr.fbouvet.employee.application.rest.dto.EmployeeDto;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.axonframework.extensions.reactor.commandhandling.gateway.ReactorCommandGateway;
 import org.axonframework.extensions.reactor.queryhandling.gateway.ReactorQueryGateway;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,6 +81,20 @@ public class EmployeeController {
 
     return queryGateway.query(
         FindEmployeeByNameQuery.builder().name(name).build(),
+        multipleInstancesOf(EmployeeView.class)
+    ).map(employees -> employees.stream()
+        .map(this::toDto)
+        .collect(toList())
+    );
+  }
+
+  @GetMapping("/search/by-birth-date/{birthDate}")
+  public Mono<List<EmployeeDto>> findByBirthDate(
+      @PathVariable @DateTimeFormat(iso = DATE) LocalDate birthDate
+  ) {
+
+    return queryGateway.query(
+        FindEmployeeByBirthDateQuery.builder().birthDate(birthDate).build(),
         multipleInstancesOf(EmployeeView.class)
     ).map(employees -> employees.stream()
         .map(this::toDto)

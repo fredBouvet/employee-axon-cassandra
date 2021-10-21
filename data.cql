@@ -22,3 +22,13 @@ CREATE TABLE employee_by_name
     birthDate date,
     PRIMARY KEY (name, id)
 );
+
+CREATE TABLE employee_by_birth_date
+(
+    birthDate date,
+    id        uuid,
+    name      text,
+    address   text,
+    email     text,
+    PRIMARY KEY (birthDate, id)
+);

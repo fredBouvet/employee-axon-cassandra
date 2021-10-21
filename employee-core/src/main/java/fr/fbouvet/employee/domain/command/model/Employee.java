@@ -69,7 +69,6 @@ public class Employee {
     apply(
         EmployeeNameChangedEvent.builder()
             .id(command.getId())
-            .previousName(name)
             .name(command.getName())
             .build()
     );

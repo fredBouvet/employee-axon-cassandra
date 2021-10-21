@@ -9,6 +9,5 @@ import lombok.Value;
 public class EmployeeNameChangedEvent {
 
   UUID id;
-  String previousName;
   String name;
 }

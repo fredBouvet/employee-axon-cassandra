@@ -4,11 +4,15 @@ import static java.util.stream.Collectors.toList;
 
 import fr.fbouvet.employee.api.query.model.EmployeeView;
 import fr.fbouvet.employee.domain.query.EmployeeViewRepository;
+import fr.fbouvet.employee.infrastructure.query.bybirthdate.EmployeeByBirthDate;
+import fr.fbouvet.employee.infrastructure.query.bybirthdate.EmployeeByBirthDateRepository;
+import fr.fbouvet.employee.infrastructure.query.bybirthdate.EmployeeKeyByBirthDate;
 import fr.fbouvet.employee.infrastructure.query.byid.EmployeeById;
 import fr.fbouvet.employee.infrastructure.query.byid.EmployeeByIdRepository;
 import fr.fbouvet.employee.infrastructure.query.byname.EmployeeByName;
 import fr.fbouvet.employee.infrastructure.query.byname.EmployeeByNameRepository;
 import fr.fbouvet.employee.infrastructure.query.byname.EmployeeKeyByName;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,31 +25,50 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
 
   private final EmployeeByIdRepository repositoryById;
   private final EmployeeByNameRepository repositoryByName;
+  private final EmployeeByBirthDateRepository repositoryByBirthDate;
 
   @Override
   public void insertEmployee(EmployeeView employeeView) {
     repositoryById.insert(toEmployeeById(employeeView));
     repositoryByName.insert(toEmployeeByName(employeeView));
+    repositoryByBirthDate.insert(toEmployeeByBirthDate(employeeView));
   }
 
   @Override
-  public void changeName(UUID id, String previousName, String name) {
+  public void changeName(UUID id, String name) {
 
-    repositoryById.insert(EmployeeById.builder().id(id).name(name).build());
+    repositoryById.findById(id).ifPresent(
+        employeeById -> {
 
-    repositoryByName.findById(
-        EmployeeKeyByName.builder()
-            .id(id)
-            .name(previousName)
-            .build()
-    ).ifPresent(employeeByName -> {
-          repositoryByName.delete(employeeByName);
-          repositoryByName.insert(
-              EmployeeByName.builder()
-                  .key(EmployeeKeyByName.builder().id(id).name(name).build())
-                  .address(employeeByName.getAddress())
-                  .email(employeeByName.getEmail())
-                  .birthDate(employeeByName.getBirthDate())
+          repositoryById.insert(EmployeeById.builder().id(id).name(name).build());
+
+          repositoryByName.findById(
+              EmployeeKeyByName.builder()
+                  .id(id)
+                  .name(employeeById.getName())
+                  .build()
+          ).ifPresent(employeeByName -> {
+                repositoryByName.delete(employeeByName);
+                repositoryByName.insert(
+                    EmployeeByName.builder()
+                        .key(EmployeeKeyByName.builder().id(id).name(name).build())
+                        .address(employeeByName.getAddress())
+                        .email(employeeByName.getEmail())
+                        .birthDate(employeeByName.getBirthDate())
+                        .build()
+                );
+              }
+          );
+
+          repositoryByBirthDate.insert(
+              EmployeeByBirthDate.builder()
+                  .key(
+                      EmployeeKeyByBirthDate.builder()
+                      .id(employeeById.getId())
+                      .birthDate(employeeById.getBirthDate())
+                      .build()
+                  )
+                  .name(name)
                   .build()
           );
         }
@@ -59,7 +82,14 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
 
   @Override
   public List<EmployeeView> findByName(String name) {
-    return repositoryByName.findByName(name).stream()
+    return repositoryByName.findByName(name)
+        .map(this::toView)
+        .collect(toList());
+  }
+
+  @Override
+  public List<EmployeeView> findByBirthDate(LocalDate birhdate) {
+    return repositoryByBirthDate.findByBirthDate(birhdate)
         .map(this::toView)
         .collect(toList());
   }
@@ -97,6 +127,17 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
         .build();
   }
 
+  private EmployeeView toView(EmployeeByBirthDate employeeByBirthDate) {
+
+    return EmployeeView.builder()
+        .id(employeeByBirthDate.getKey().getId())
+        .birthDate(employeeByBirthDate.getKey().getBirthDate())
+        .name(employeeByBirthDate.getName())
+        .address(employeeByBirthDate.getAddress())
+        .email(employeeByBirthDate.getEmail())
+        .build();
+  }
+
   private EmployeeByName toEmployeeByName(EmployeeView employeeView) {
 
     return EmployeeByName.builder()
@@ -109,6 +150,20 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
         .address(employeeView.getAddress())
         .email(employeeView.getEmail())
         .birthDate(employeeView.getBirthDate())
+        .build();
+  }
+
+  private EmployeeByBirthDate toEmployeeByBirthDate(EmployeeView employeeView) {
+
+    return EmployeeByBirthDate.builder()
+        .key(EmployeeKeyByBirthDate.builder()
+            .birthDate(employeeView.getBirthDate())
+            .id(employeeView.getId())
+            .build()
+        )
+        .name(employeeView.getName())
+        .address(employeeView.getAddress())
+        .email(employeeView.getEmail())
         .build();
   }
 }
