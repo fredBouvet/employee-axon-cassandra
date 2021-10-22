@@ -92,7 +92,56 @@ Configure the port by changing `server.port` in __application.properties__
 
 
 ## API
-TODO: API Reference with examples, or a link to a wiki or other documentation source.
+
+### Create an employee
+```bash
+curl --location --request POST 'http://localhost:8080/employees' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name":"toto",
+    "address": "toto address",
+    "email":"toto@gmail.com",
+    "birthDate":"1980-02-25"
+}'
+```
+Reponse: the unique identifier
+```bash
+"a271c491-9892-446f-95bb-0be9765d1178"
+```
+
+### Change employee name
+```bash
+curl --location --request PUT 'http://localhost:8080/employees/a271c491-9892-446f-95bb-0be9765d1178/name' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name":"bob"
+}'
+```
+
+### Find employee by id
+```bash
+curl --location --request GET 'http://localhost:8080/employees/a271c491-9892-446f-95bb-0be9765d1178'
+```
+Response
+```json
+{
+    "id": "a271c491-9892-446f-95bb-0be9765d1178",
+    "name": "bob",
+    "address": "address de toto",
+    "email": "toto@gmail.com",
+    "birthDate": "1980-02-25"
+}
+```
+
+### Find employees by name
+```bash
+curl --location --request GET 'http://localhost:8080/employees/search/by-name/bob'
+```
+
+### Find employees by birthDate
+```bash
+curl --location --request GET 'http://localhost:8080/employees/search/by-birth-date/1980-02-04'
+```
 
 ### Additional Links
 These additional references should also help you:
