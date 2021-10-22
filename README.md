@@ -104,7 +104,7 @@ curl --location --request POST 'http://localhost:8080/employees' \
     "birthDate":"1980-02-25"
 }'
 ```
-Reponse: the unique identifier
+Response: the unique identifier
 ```bash
 "a271c491-9892-446f-95bb-0be9765d1178"
 ```
@@ -121,16 +121,6 @@ curl --location --request PUT 'http://localhost:8080/employees/a271c491-9892-446
 ### Find employee by id
 ```bash
 curl --location --request GET 'http://localhost:8080/employees/a271c491-9892-446f-95bb-0be9765d1178'
-```
-Response
-```json
-{
-    "id": "a271c491-9892-446f-95bb-0be9765d1178",
-    "name": "bob",
-    "address": "address de toto",
-    "email": "toto@gmail.com",
-    "birthDate": "1980-02-25"
-}
 ```
 
 ### Find employees by name
