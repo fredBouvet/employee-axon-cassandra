@@ -1,4 +1,4 @@
-#Employee 
+# Employee 
 
 ## Table of Contents
 
@@ -96,7 +96,7 @@ TODO: API Reference with examples, or a link to a wiki or other documentation so
 
 ### Additional Links
 These additional references should also help you:
-####Axon
+#### Axon
 * [The Axon Framework open-source code repository on GitHub](https://github.com/AxonFramework)
 * [The reference guide on how to use Axon](https://docs.axoniq.io/reference-guide/)
 * [A full getting started tutorial for Axon in small simple steps (YouTube).](https://www.youtube.com/watch?v=tqn9p8Duy54&list=PL4O1nDpoa5KQkkApGXjKi3rzUW3II5pjm)
@@ -104,11 +104,11 @@ These additional references should also help you:
 * [The Axon Reactor extension open-source code repository for GitHub](https://github.com/AxonFramework/extension-reactor)
 * [The reference guide section on how to use Axon Reactor extension](https://docs.axoniq.io/reference-guide/extensions/reactor)
  
-####Cassandra
+#### Cassandra
 * [Apache Cassandra](https://cassandra.apache.org/_/index.html)
 * [Introduction to spring data cassandra by baeldung](https://www.baeldung.com/spring-data-cassandra-tutorial)
 * [Spring data cassandra documentation](https://spring.io/projects/spring-data-cassandra)
 
-####Reactive api
+#### Reactive api
 * [Project reactor](https://projectreactor.io/)
 * [Guide to Spring 5 WebFlux by baeldung](https://www.baeldung.com/spring-webflux)
