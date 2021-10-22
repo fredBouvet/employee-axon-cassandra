@@ -38,35 +38,30 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
   public void changeName(UUID id, String name) {
 
     repositoryById.findById(id).ifPresent(
-        employeeById -> {
+        employee -> {
 
           repositoryById.insert(EmployeeById.builder().id(id).name(name).build());
 
-          repositoryByName.findById(
-              EmployeeKeyByName.builder()
-                  .id(id)
-                  .name(employeeById.getName())
+          repositoryByName.deleteById(
+              EmployeeKeyByName.builder().id(id).name(employee.getName()).build()
+          );
+
+          repositoryByName.insert(
+              EmployeeByName.builder()
+                  .key(EmployeeKeyByName.builder().id(id).name(name).build())
+                  .address(employee.getAddress())
+                  .email(employee.getEmail())
+                  .birthDate(employee.getBirthDate())
                   .build()
-          ).ifPresent(employeeByName -> {
-                repositoryByName.delete(employeeByName);
-                repositoryByName.insert(
-                    EmployeeByName.builder()
-                        .key(EmployeeKeyByName.builder().id(id).name(name).build())
-                        .address(employeeByName.getAddress())
-                        .email(employeeByName.getEmail())
-                        .birthDate(employeeByName.getBirthDate())
-                        .build()
-                );
-              }
           );
 
           repositoryByBirthDate.insert(
               EmployeeByBirthDate.builder()
                   .key(
                       EmployeeKeyByBirthDate.builder()
-                      .id(employeeById.getId())
-                      .birthDate(employeeById.getBirthDate())
-                      .build()
+                          .id(id)
+                          .birthDate(employee.getBirthDate())
+                          .build()
                   )
                   .name(name)
                   .build()
