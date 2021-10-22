@@ -3,10 +3,8 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Features](#features)
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
-- [Testing](#testing)
 - [API](#requirements)
 
 
@@ -16,14 +14,6 @@
 
 
 Hello-world project: How to build a CQRS/ES hexagonal java microservice using Axon and Cassandra
-
-
-## Features
-TODO: Description of features
-
-* Include a list of
-* all the many beautiful
-* web server features
 
 
 ## Requirements
@@ -38,30 +28,67 @@ TODO: Description of features
 
 ## Quick Start
 
+### Set up cassandra
 
-### Run Axon and Cassandra 
+- Cassandra use the default port `9042`
 
-With docker (see the docker-compose.yml in the project)
 ```bash
-$ docker-compose up -d axon cassandra
+$ docker-compose up -d cassandra
+$ docker exec -ti cassandra cqlsh
 ```
- - Axon use the default port `8024` for http, and `8124` for grpc
- - Cassandra use the default port `9042`
+```sql
+create keyspace employee with replication ={'class':'SimpleStrategy', 'replication_factor':1};
 
+use employee;
+
+CREATE TABLE employee_by_id
+(
+    id        uuid,
+    name      text,
+    address   text,
+    email     text,
+    birthDate date,
+    PRIMARY KEY (id)
+);
+
+
+CREATE TABLE employee_by_name
+(
+    name      text,
+    id        uuid,
+    address   text,
+    email     text,
+    birthDate date,
+    PRIMARY KEY (name, id)
+);
+
+CREATE TABLE employee_by_birth_date
+(
+    birthDate date,
+    id        uuid,
+    name      text,
+    address   text,
+    email     text,
+    PRIMARY KEY (birthDate, id)
+);
+```
+
+### Set up Axon
+```bash
+$ docker-compose up -d axon
+```
+- Axon use the default port `8024` for http, and `8124` for grpc
+- You can see the axon console here: http://localhost:8024/
 
 ### Run employee in local
 ```bash
-$ mvn install
-java -jar ./employee-core/target/employee-core-0.0.1-SNAPSHOT.jar
+$ mvn compile
+$ mvn exec:java -pl employee-core -Dexec.mainClass="fr.fbouvet.employee.EmployeeApplication"
 ```
 
 Application will run by default on port `8080`
 
 Configure the port by changing `server.port` in __application.properties__
-
-
-## Testing
-TODO: Additional instructions for testing the application.
 
 
 ## API
