@@ -9,12 +9,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.axonframework.commandhandling.CommandExecutionException;
+import org.axonframework.messaging.HandlerExecutionException;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -28,25 +29,30 @@ public class GlobalErrorHandler implements ErrorWebExceptionHandler {
   @Override
   public Mono<Void> handle(ServerWebExchange serverWebExchange, Throwable throwable) {
 
-    DataBufferFactory bufferFactory = serverWebExchange.getResponse().bufferFactory();
+    ServerHttpResponse response = serverWebExchange.getResponse();
+    DataBufferFactory bufferFactory = response.bufferFactory();
 
-    if (throwable instanceof CommandExecutionException) {
-      serverWebExchange.getResponse().setStatusCode(BAD_REQUEST);
-      DataBuffer dataBuffer = null;
-      try {
-        dataBuffer = bufferFactory.wrap(
-            objectMapper.writeValueAsBytes(new HttpError(throwable.getMessage())));
-      } catch (JsonProcessingException e) {
-        dataBuffer = bufferFactory.wrap("".getBytes());
-      }
-      serverWebExchange.getResponse().getHeaders().setContentType(APPLICATION_JSON);
-      return serverWebExchange.getResponse().writeWith(Mono.just(dataBuffer));
+    if (throwable instanceof HandlerExecutionException) {
+      response.setStatusCode(BAD_REQUEST);
+      response.getHeaders().setContentType(APPLICATION_JSON);
+      return response.writeWith(Mono.just(getDataBuffer(throwable, bufferFactory)));
     }
 
-    serverWebExchange.getResponse().setStatusCode(INTERNAL_SERVER_ERROR);
-    serverWebExchange.getResponse().getHeaders().setContentType(TEXT_PLAIN);
+    response.setStatusCode(INTERNAL_SERVER_ERROR);
+    response.getHeaders().setContentType(TEXT_PLAIN);
     DataBuffer dataBuffer = bufferFactory.wrap("Unknown error".getBytes());
-    return serverWebExchange.getResponse().writeWith(Mono.just(dataBuffer));
+    return response.writeWith(Mono.just(dataBuffer));
+  }
+
+  private DataBuffer getDataBuffer(Throwable throwable, DataBufferFactory bufferFactory) {
+    DataBuffer dataBuffer;
+    try {
+      dataBuffer = bufferFactory.wrap(
+          objectMapper.writeValueAsBytes(new HttpError(throwable.getMessage())));
+    } catch (JsonProcessingException e) {
+      dataBuffer = bufferFactory.wrap("".getBytes());
+    }
+    return dataBuffer;
   }
 
   @Getter
