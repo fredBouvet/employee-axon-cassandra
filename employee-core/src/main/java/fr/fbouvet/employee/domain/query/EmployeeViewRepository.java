@@ -16,5 +16,5 @@ public interface EmployeeViewRepository {
 
   List<EmployeeView> findByName(String name);
 
-  List<EmployeeView> findByBirthDate(LocalDate birhdate);
+  List<EmployeeView> findByBirthDate(LocalDate birthDate);
 }

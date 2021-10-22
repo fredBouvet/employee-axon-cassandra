@@ -83,8 +83,8 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
   }
 
   @Override
-  public List<EmployeeView> findByBirthDate(LocalDate birhdate) {
-    return repositoryByBirthDate.findByBirthDate(birhdate)
+  public List<EmployeeView> findByBirthDate(LocalDate birthDate) {
+    return repositoryByBirthDate.findByBirthDate(birthDate)
         .map(this::toView)
         .collect(toList());
   }
