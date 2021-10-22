@@ -21,13 +21,8 @@
     <dependency>
       <groupId>org.axonframework</groupId>
       <artifactId>axon-modelling</artifactId>
-      <version>4.5.3</version>
+      <version>${axon.version}</version>
       <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
     </dependency>
 
   </dependencies>
