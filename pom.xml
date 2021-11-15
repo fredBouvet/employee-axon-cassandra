@@ -15,9 +15,9 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>fr.fbouvet</groupId>
-  <artifactId>employee</artifactId>
+  <artifactId>employee-axon-cassandra</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>employee</name>
+  <name>employee-axon-cassandra</name>
   <description>employee</description>
   <properties>
     <java.version>11</java.version>
