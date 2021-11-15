@@ -100,7 +100,7 @@ curl --location --request POST 'http://localhost:8080/employees' \
 --data-raw '{
     "name":"toto",
     "address": "toto address",
-    "email":"toto@gmail.com",
+    "email":"toto@example.com",
     "birthDate":"1980-02-25"
 }'
 ```
