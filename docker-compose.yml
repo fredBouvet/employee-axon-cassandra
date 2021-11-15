@@ -4,6 +4,8 @@ services:
   axon:
    container_name: axon
    image: axoniq/axonserver:latest
+   environment:
+     - AXONIQ_AXONSERVER_DEVMODE_ENABLED=true
    ports:
      - "8024:8024"
      - "8124:8124"
