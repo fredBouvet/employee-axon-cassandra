@@ -24,7 +24,7 @@ Hello-world project: How to build a CQRS/ES hexagonal java microservice using Ax
 * [Maven](https://maven.apache.org/download.cgi)
 
 ### Docker
-* [Docker](https://www.docker.com/get-docker)
+* [Docker](https://www.docker.com/get-docker) (This is convenient, but you can also install cassandra and AxonServer locally)
 
 ## Quick Start
 
@@ -133,21 +133,43 @@ curl --location --request GET 'http://localhost:8080/employees/search/by-name/bo
 curl --location --request GET 'http://localhost:8080/employees/search/by-birth-date/1980-02-04'
 ```
 
-### Additional Links
+## Project structure
+
+### employee-api
+This part is in a separate maven module in order to expose to another microservice the employee grpc api.
+It contains all the command, events and queries used.
+In a separate project, just import this dependency for listening employee event, or sending command and queries to employee (via the axon commandGateway or queryGateway)
+
+### employee-core
+
+#### application
+This package contains the reactive rest api (using reactor and axon-reactor extension).
+
+#### domain
+Contains the two models:
+- Command domain : The aggregate, commandHandler, eventSourcingHandler
+- Query domain: The eventHandler for projections, and queryHandler
+
+#### infrastructure
+Contains the implementation of the repository defined in the query domain.
+This is a hexagonal architecture, the domain has no dependency with this sublayer (if you want, you can replace the cassandra database by another db, without impacting the domain layer).
+
+## Additional Links
 These additional references should also help you:
-#### Axon
+### Axon
 * [The Axon Framework open-source code repository on GitHub](https://github.com/AxonFramework)
 * [The reference guide on how to use Axon](https://docs.axoniq.io/reference-guide/)
 * [A full getting started tutorial for Axon in small simple steps (YouTube).](https://www.youtube.com/watch?v=tqn9p8Duy54&list=PL4O1nDpoa5KQkkApGXjKi3rzUW3II5pjm)
 * [The reference guide section on how to use Axon Test module](https://docs.axoniq.io/reference-guide/axon-framework/testing)
 * [The Axon Reactor extension open-source code repository for GitHub](https://github.com/AxonFramework/extension-reactor)
 * [The reference guide section on how to use Axon Reactor extension](https://docs.axoniq.io/reference-guide/extensions/reactor)
- 
-#### Cassandra
+* [Why I don't use cassandra also for the event store](https://axoniq.io/blog-overview/eventstore) 
+
+### Cassandra
 * [Apache Cassandra](https://cassandra.apache.org/_/index.html)
 * [Introduction to spring data cassandra by baeldung](https://www.baeldung.com/spring-data-cassandra-tutorial)
 * [Spring data cassandra documentation](https://spring.io/projects/spring-data-cassandra)
 
-#### Reactive api
+### Reactive api
 * [Project reactor](https://projectreactor.io/)
 * [Guide to Spring 5 WebFlux by baeldung](https://www.baeldung.com/spring-webflux)
