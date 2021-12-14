@@ -6,6 +6,8 @@
 - [Requirements](#requirements)
 - [Quick Start](#quick-start)
 - [API](#requirements)
+- [Project structure](#project-structure)
+- [Additional Links](#additional-links)
 
 
 ## Introduction
@@ -147,8 +149,8 @@ This package contains the reactive rest api (using reactor and axon-reactor exte
 
 #### domain
 Contains the two models:
-- Command domain : The aggregate, commandHandler, eventSourcingHandler
-- Query domain: The eventHandler for projections, and queryHandler
+- Command model : The aggregate, commandHandler, eventSourcingHandler
+- Query model: The eventHandler for projections, and queryHandler
 
 #### infrastructure
 Contains the implementation of the repository defined in the query domain.
