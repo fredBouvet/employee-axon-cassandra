@@ -1,13 +1,12 @@
 package fr.fbouvet.employee.api.event;
 
-import java.util.UUID;
 import lombok.Builder;
-import lombok.Value;
 
-@Value
+import java.util.UUID;
+
 @Builder
-public class EmployeeNameChangedEvent {
-
-  UUID id;
-  String name;
+public record EmployeeNameChangedEvent(
+        UUID id,
+        String name
+) {
 }

@@ -32,25 +32,25 @@ public class Employee {
   @CommandHandler
   public Employee(CreateEmployeeCommand command) {
 
-    if (isEmpty(command.getName())) {
+    if (isEmpty(command.name())) {
       throw new IllegalArgumentException("Name must not be empty");
     }
 
-    if (command.getBirthDate() == null) {
+    if (command.birthDate() == null) {
       throw new IllegalArgumentException("Birthdate must not be empty");
     }
 
-    if (!RFC_5322.matcher(command.getEmail()).matches()) {
+    if (!RFC_5322.matcher(command.email()).matches()) {
       throw new IllegalArgumentException("Bad email address");
     }
 
     apply(
         EmployeeCreatedEvent.builder()
-            .id(command.getId())
-            .name(command.getName())
-            .address(command.getAddress())
-            .email(command.getEmail())
-            .birthDate(command.getBirthDate())
+            .id(command.id())
+            .name(command.name())
+            .address(command.address())
+            .email(command.email())
+            .birthDate(command.birthDate())
             .build()
     );
   }
@@ -58,30 +58,30 @@ public class Employee {
   @CommandHandler
   public void changeName(ChangeEmployeeNameCommand command) {
 
-    if (isEmpty(command.getName())) {
+    if (isEmpty(command.name())) {
       throw new IllegalArgumentException("Name must not be empty");
     }
 
-    if (command.getName().equals(name)) {
+    if (command.name().equals(name)) {
       throw new IllegalArgumentException("This name is already set");
     }
 
     apply(
         EmployeeNameChangedEvent.builder()
-            .id(command.getId())
-            .name(command.getName())
+            .id(command.id())
+            .name(command.name())
             .build()
     );
   }
 
   @EventSourcingHandler
   public void onEmployeeCreated(EmployeeCreatedEvent event) {
-    id = event.getId();
-    name = event.getName();
+    id = event.id();
+    name = event.name();
   }
 
   @EventSourcingHandler
   public void onNameChanged(EmployeeNameChangedEvent event) {
-    name = event.getName();
+    name = event.name();
   }
 }

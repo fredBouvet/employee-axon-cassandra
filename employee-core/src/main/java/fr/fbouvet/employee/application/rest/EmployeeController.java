@@ -104,11 +104,11 @@ public class EmployeeController {
 
   private EmployeeDto toDto(EmployeeView employeeView) {
     return EmployeeDto.builder()
-        .id(employeeView.getId())
-        .name(employeeView.getName())
-        .address(employeeView.getAddress())
-        .email(employeeView.getEmail())
-        .birthDate(employeeView.getBirthDate())
+        .id(employeeView.id())
+        .name(employeeView.name())
+        .address(employeeView.address())
+        .email(employeeView.email())
+        .birthDate(employeeView.birthDate())
         .build();
   }
 }

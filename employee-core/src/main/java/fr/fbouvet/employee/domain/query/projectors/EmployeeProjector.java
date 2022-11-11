@@ -19,17 +19,17 @@ public class EmployeeProjector {
 
     repository.insertEmployee(
         EmployeeView.builder()
-            .id(employeeCreatedEvent.getId())
-            .name(employeeCreatedEvent.getName())
-            .address(employeeCreatedEvent.getAddress())
-            .email(employeeCreatedEvent.getEmail())
-            .birthDate(employeeCreatedEvent.getBirthDate())
+            .id(employeeCreatedEvent.id())
+            .name(employeeCreatedEvent.name())
+            .address(employeeCreatedEvent.address())
+            .email(employeeCreatedEvent.email())
+            .birthDate(employeeCreatedEvent.birthDate())
             .build()
     );
   }
 
   @EventHandler
   public void onNameChanged(EmployeeNameChangedEvent event) {
-    repository.changeName(event.getId(), event.getName());
+    repository.changeName(event.id(), event.name());
   }
 }

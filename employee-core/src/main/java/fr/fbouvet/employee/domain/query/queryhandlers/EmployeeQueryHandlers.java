@@ -19,17 +19,17 @@ public class EmployeeQueryHandlers {
 
   @QueryHandler
   public Optional<EmployeeView> findById(FindEmployeeByIdQuery query) {
-    return repository.findById(query.getId());
+    return repository.findById(query.id());
   }
 
   @QueryHandler
   public List<EmployeeView> findByName(FindEmployeeByNameQuery query) {
-    return repository.findByName(query.getName());
+    return repository.findByName(query.name());
   }
 
   @QueryHandler
   public List<EmployeeView> findByBirthDate(FindEmployeeByBirthDateQuery query) {
-    return repository.findByBirthDate(query.getBirthDate());
+    return repository.findByBirthDate(query.birthDate());
   }
 
 }

@@ -1,12 +1,10 @@
 package fr.fbouvet.employee.api.query;
 
-import java.time.LocalDate;
 import lombok.Builder;
-import lombok.Value;
 
-@Value
+import java.time.LocalDate;
+
+
 @Builder
-public class FindEmployeeByBirthDateQuery {
-
-  LocalDate birthDate;
+public record FindEmployeeByBirthDateQuery(LocalDate birthDate) {
 }

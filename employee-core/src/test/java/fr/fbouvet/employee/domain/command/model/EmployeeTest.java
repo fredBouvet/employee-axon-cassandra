@@ -1,19 +1,20 @@
 package fr.fbouvet.employee.domain.command.model;
 
 
-import static java.util.UUID.randomUUID;
-
 import fr.fbouvet.employee.api.command.ChangeEmployeeNameCommand;
 import fr.fbouvet.employee.api.command.CreateEmployeeCommand;
 import fr.fbouvet.employee.api.event.EmployeeCreatedEvent;
 import fr.fbouvet.employee.api.event.EmployeeNameChangedEvent;
-import java.time.LocalDate;
-import java.util.UUID;
 import org.axonframework.modelling.command.AggregateNotFoundException;
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.axonframework.test.aggregate.FixtureConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+import static java.util.UUID.randomUUID;
 
 class EmployeeTest {
 
@@ -88,11 +89,11 @@ class EmployeeTest {
         .expectSuccessfulHandlerExecution()
         .expectEvents(
             EmployeeCreatedEvent.builder()
-                .id(command.getId())
-                .name(command.getName())
-                .address(command.getAddress())
-                .email(command.getEmail())
-                .birthDate(command.getBirthDate())
+                .id(command.id())
+                .name(command.name())
+                .address(command.address())
+                .email(command.email())
+                .birthDate(command.birthDate())
                 .build()
         );
   }
@@ -182,5 +183,4 @@ class EmployeeTest {
                 .build()
         );
   }
-
 }

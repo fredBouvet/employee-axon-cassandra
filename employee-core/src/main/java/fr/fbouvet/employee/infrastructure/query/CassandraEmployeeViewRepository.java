@@ -103,11 +103,11 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
   private EmployeeById toEmployeeById(EmployeeView employeeView) {
 
     return EmployeeById.builder()
-        .id(employeeView.getId())
-        .name(employeeView.getName())
-        .address(employeeView.getAddress())
-        .email(employeeView.getEmail())
-        .birthDate(employeeView.getBirthDate())
+        .id(employeeView.id())
+        .name(employeeView.name())
+        .address(employeeView.address())
+        .email(employeeView.email())
+        .birthDate(employeeView.birthDate())
         .build();
   }
 
@@ -138,13 +138,13 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
     return EmployeeByName.builder()
         .key(
             EmployeeKeyByName.builder()
-                .id(employeeView.getId())
-                .name(employeeView.getName())
+                .id(employeeView.id())
+                .name(employeeView.name())
                 .build()
         )
-        .address(employeeView.getAddress())
-        .email(employeeView.getEmail())
-        .birthDate(employeeView.getBirthDate())
+        .address(employeeView.address())
+        .email(employeeView.email())
+        .birthDate(employeeView.birthDate())
         .build();
   }
 
@@ -152,13 +152,13 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
 
     return EmployeeByBirthDate.builder()
         .key(EmployeeKeyByBirthDate.builder()
-            .birthDate(employeeView.getBirthDate())
-            .id(employeeView.getId())
+            .birthDate(employeeView.birthDate())
+            .id(employeeView.id())
             .build()
         )
-        .name(employeeView.getName())
-        .address(employeeView.getAddress())
-        .email(employeeView.getEmail())
+        .name(employeeView.name())
+        .address(employeeView.address())
+        .email(employeeView.email())
         .build();
   }
 }
