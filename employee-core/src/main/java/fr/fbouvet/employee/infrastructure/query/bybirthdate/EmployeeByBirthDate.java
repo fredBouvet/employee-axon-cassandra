@@ -10,9 +10,9 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Builder
 public class EmployeeByBirthDate {
 
-  @PrimaryKey
-  EmployeeKeyByBirthDate key;
-  String name;
-  String address;
-  String email;
+    @PrimaryKey
+    EmployeeKeyByBirthDate key;
+    String name;
+    String address;
+    String email;
 }

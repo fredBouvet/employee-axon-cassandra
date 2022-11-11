@@ -1,10 +1,10 @@
 package fr.fbouvet.employee.api.command;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
 import lombok.Builder;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 
 @Builder

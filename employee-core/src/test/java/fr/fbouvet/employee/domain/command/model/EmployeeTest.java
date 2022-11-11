@@ -18,169 +18,169 @@ import static java.util.UUID.randomUUID;
 
 class EmployeeTest {
 
-  private FixtureConfiguration<Employee> fixture;
+    private FixtureConfiguration<Employee> fixture;
 
-  @BeforeEach
-  void setUp() {
-    fixture = new AggregateTestFixture<>(Employee.class);
-  }
+    @BeforeEach
+    void setUp() {
+        fixture = new AggregateTestFixture<>(Employee.class);
+    }
 
-  @Test
-  void createEmployeeCommand_withMissingName_shouldThrowException() {
+    @Test
+    void createEmployeeCommand_withMissingName_shouldThrowException() {
 
-    fixture.givenNoPriorActivity()
-        .when(
-            CreateEmployeeCommand.builder()
-                .id(randomUUID())
-                .name(null)
-                .address("42 example road")
-                .email("toto@example.com")
-                .birthDate(LocalDate.now().minusYears(21))
-                .build()
-        )
-        .expectException(IllegalArgumentException.class);
-  }
+        fixture.givenNoPriorActivity()
+                .when(
+                        CreateEmployeeCommand.builder()
+                                .id(randomUUID())
+                                .name(null)
+                                .address("42 example road")
+                                .email("toto@example.com")
+                                .birthDate(LocalDate.now().minusYears(21))
+                                .build()
+                )
+                .expectException(IllegalArgumentException.class);
+    }
 
-  @Test
-  void createEmployeeCommand_withMissingBirthDate_shouldThrowException() {
+    @Test
+    void createEmployeeCommand_withMissingBirthDate_shouldThrowException() {
 
-    fixture.givenNoPriorActivity()
-        .when(
-            CreateEmployeeCommand.builder()
+        fixture.givenNoPriorActivity()
+                .when(
+                        CreateEmployeeCommand.builder()
+                                .id(randomUUID())
+                                .name("toto")
+                                .address("42 example road")
+                                .email("toto@example.com")
+                                .birthDate(null)
+                                .build()
+                )
+                .expectException(IllegalArgumentException.class);
+    }
+
+    @Test
+    void createEmployeeCommand_withBadEmail_shouldThrowException() {
+
+        fixture.givenNoPriorActivity()
+                .when(
+                        CreateEmployeeCommand.builder()
+                                .id(randomUUID())
+                                .name("toto")
+                                .address("42 example road")
+                                .email("Bad email")
+                                .birthDate(LocalDate.now().minusYears(21))
+                                .build()
+                )
+                .expectException(IllegalArgumentException.class);
+    }
+
+    @Test
+    void createEmployeeCommand_withGoodData_shouldSendEmployeeCreatedEvent() {
+
+        CreateEmployeeCommand command = CreateEmployeeCommand.builder()
                 .id(randomUUID())
                 .name("toto")
                 .address("42 example road")
                 .email("toto@example.com")
-                .birthDate(null)
-                .build()
-        )
-        .expectException(IllegalArgumentException.class);
-  }
-
-  @Test
-  void createEmployeeCommand_withBadEmail_shouldThrowException() {
-
-    fixture.givenNoPriorActivity()
-        .when(
-            CreateEmployeeCommand.builder()
-                .id(randomUUID())
-                .name("toto")
-                .address("42 example road")
-                .email("Bad email")
                 .birthDate(LocalDate.now().minusYears(21))
-                .build()
-        )
-        .expectException(IllegalArgumentException.class);
-  }
+                .build();
 
-  @Test
-  void createEmployeeCommand_withGoodData_shouldSendEmployeeCreatedEvent() {
+        fixture.givenNoPriorActivity()
+                .when(command)
+                .expectSuccessfulHandlerExecution()
+                .expectEvents(
+                        EmployeeCreatedEvent.builder()
+                                .id(command.id())
+                                .name(command.name())
+                                .address(command.address())
+                                .email(command.email())
+                                .birthDate(command.birthDate())
+                                .build()
+                );
+    }
 
-    CreateEmployeeCommand command = CreateEmployeeCommand.builder()
-        .id(randomUUID())
-        .name("toto")
-        .address("42 example road")
-        .email("toto@example.com")
-        .birthDate(LocalDate.now().minusYears(21))
-        .build();
+    @Test
+    void changeEmployeeNameCommand_withNoEmployee_shouldThrowException() {
 
-    fixture.givenNoPriorActivity()
-        .when(command)
-        .expectSuccessfulHandlerExecution()
-        .expectEvents(
-            EmployeeCreatedEvent.builder()
-                .id(command.id())
-                .name(command.name())
-                .address(command.address())
-                .email(command.email())
-                .birthDate(command.birthDate())
-                .build()
-        );
-  }
+        UUID id = randomUUID();
+        String name = "toto";
 
-  @Test
-  void changeEmployeeNameCommand_withNoEmployee_shouldThrowException() {
+        fixture.givenNoPriorActivity()
+                .when(ChangeEmployeeNameCommand.builder()
+                        .id(id)
+                        .name(name)
+                        .build())
+                .expectException(AggregateNotFoundException.class);
+    }
 
-    UUID id = randomUUID();
-    String name = "toto";
+    @Test
+    void changeEmployeeNameCommand_withMissingName_shouldThrowException() {
 
-    fixture.givenNoPriorActivity()
-        .when(ChangeEmployeeNameCommand.builder()
-            .id(id)
-            .name(name)
-            .build())
-        .expectException(AggregateNotFoundException.class);
-  }
+        UUID id = randomUUID();
 
-  @Test
-  void changeEmployeeNameCommand_withMissingName_shouldThrowException() {
+        fixture.given(EmployeeCreatedEvent.builder()
+                        .id(id)
+                        .name("toto")
+                        .address("42 example road")
+                        .email("toto@example.com")
+                        .birthDate(LocalDate.now().minusYears(21))
+                        .build())
+                .when(
+                        ChangeEmployeeNameCommand.builder()
+                                .id(id)
+                                .build()
+                )
+                .expectException(IllegalArgumentException.class);
+    }
 
-    UUID id = randomUUID();
+    @Test
+    void changeEmployeeNameCommand_withSameName_shouldThrowException() {
 
-    fixture.given(EmployeeCreatedEvent.builder()
-            .id(id)
-            .name("toto")
-            .address("42 example road")
-            .email("toto@example.com")
-            .birthDate(LocalDate.now().minusYears(21))
-            .build())
-        .when(
-            ChangeEmployeeNameCommand.builder()
-                .id(id)
-                .build()
-        )
-        .expectException(IllegalArgumentException.class);
-  }
+        UUID id = randomUUID();
+        String name = "toto";
 
-  @Test
-  void changeEmployeeNameCommand_withSameName_shouldThrowException() {
+        fixture.given(EmployeeCreatedEvent.builder()
+                        .id(id)
+                        .name(name)
+                        .address("42 example road")
+                        .email("toto@example.com")
+                        .birthDate(LocalDate.now().minusYears(21))
+                        .build())
+                .when(
+                        ChangeEmployeeNameCommand.builder()
+                                .id(id)
+                                .name(name)
+                                .build()
+                )
+                .expectException(IllegalArgumentException.class);
+    }
 
-    UUID id = randomUUID();
-    String name = "toto";
+    @Test
+    void changeEmployeeNameCommand_withOtherName_shouldSendEmployeeNameChangedEvent() {
 
-    fixture.given(EmployeeCreatedEvent.builder()
-            .id(id)
-            .name(name)
-            .address("42 example road")
-            .email("toto@example.com")
-            .birthDate(LocalDate.now().minusYears(21))
-            .build())
-        .when(
-            ChangeEmployeeNameCommand.builder()
-                .id(id)
-                .name(name)
-                .build()
-        )
-        .expectException(IllegalArgumentException.class);
-  }
+        UUID id = randomUUID();
 
-  @Test
-  void changeEmployeeNameCommand_withOtherName_shouldSendEmployeeNameChangedEvent() {
-
-    UUID id = randomUUID();
-
-    String newName = "bob";
-    fixture.given(
-            EmployeeCreatedEvent.builder()
-                .id(id)
-                .name("toto")
-                .address("42 example road")
-                .email("toto@example.com")
-                .birthDate(LocalDate.now().minusYears(21))
-                .build()
-        )
-        .when(
-            ChangeEmployeeNameCommand.builder()
-                .id(id)
-                .name(newName)
-                .build()
-        )
-        .expectSuccessfulHandlerExecution()
-        .expectEvents(
-            EmployeeNameChangedEvent.builder()
-                .id(id)
-                .name(newName)
-                .build()
-        );
-  }
+        String newName = "bob";
+        fixture.given(
+                        EmployeeCreatedEvent.builder()
+                                .id(id)
+                                .name("toto")
+                                .address("42 example road")
+                                .email("toto@example.com")
+                                .birthDate(LocalDate.now().minusYears(21))
+                                .build()
+                )
+                .when(
+                        ChangeEmployeeNameCommand.builder()
+                                .id(id)
+                                .name(newName)
+                                .build()
+                )
+                .expectSuccessfulHandlerExecution()
+                .expectEvents(
+                        EmployeeNameChangedEvent.builder()
+                                .id(id)
+                                .name(newName)
+                                .build()
+                );
+    }
 }

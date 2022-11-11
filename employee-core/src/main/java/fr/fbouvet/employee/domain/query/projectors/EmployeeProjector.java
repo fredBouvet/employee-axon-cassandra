@@ -12,24 +12,24 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class EmployeeProjector {
 
-  private final EmployeeViewRepository repository;
+    private final EmployeeViewRepository repository;
 
-  @EventHandler
-  public void onEmployeeCreated(EmployeeCreatedEvent employeeCreatedEvent) {
+    @EventHandler
+    public void onEmployeeCreated(EmployeeCreatedEvent employeeCreatedEvent) {
 
-    repository.insertEmployee(
-        EmployeeView.builder()
-            .id(employeeCreatedEvent.id())
-            .name(employeeCreatedEvent.name())
-            .address(employeeCreatedEvent.address())
-            .email(employeeCreatedEvent.email())
-            .birthDate(employeeCreatedEvent.birthDate())
-            .build()
-    );
-  }
+        repository.insertEmployee(
+                EmployeeView.builder()
+                        .id(employeeCreatedEvent.id())
+                        .name(employeeCreatedEvent.name())
+                        .address(employeeCreatedEvent.address())
+                        .email(employeeCreatedEvent.email())
+                        .birthDate(employeeCreatedEvent.birthDate())
+                        .build()
+        );
+    }
 
-  @EventHandler
-  public void onNameChanged(EmployeeNameChangedEvent event) {
-    repository.changeName(event.id(), event.name());
-  }
+    @EventHandler
+    public void onNameChanged(EmployeeNameChangedEvent event) {
+        repository.changeName(event.id(), event.name());
+    }
 }
