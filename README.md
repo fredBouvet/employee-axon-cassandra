@@ -73,6 +73,22 @@ CREATE TABLE employee_by_birth_date
     email     text,
     PRIMARY KEY (birthDate, id)
 );
+
+CREATE TABLE token_entry
+(
+    processorName text,
+    segment       int,    
+    tokenEntry    blob,
+    tokenType     text,
+    timestamp     timestamp,
+    PRIMARY KEY (processorName, segment)
+);
+
+CREATE TABLE token_entry_owner
+(
+    id text,
+    PRIMARY KEY (id)
+);
 ```
 
 ### Set up Axon
