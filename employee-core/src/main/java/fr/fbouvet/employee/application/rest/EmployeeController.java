@@ -45,10 +45,10 @@ public class EmployeeController {
     return commandGateway.send(
         CreateEmployeeCommand.builder()
             .id(randomUUID())
-            .name(employeeCreationDto.getName())
-            .address(employeeCreationDto.getAddress())
-            .email(employeeCreationDto.getEmail())
-            .birthDate(employeeCreationDto.getBirthDate())
+            .name(employeeCreationDto.name())
+            .address(employeeCreationDto.address())
+            .email(employeeCreationDto.email())
+            .birthDate(employeeCreationDto.birthDate())
             .build()
     );
   }
@@ -62,7 +62,7 @@ public class EmployeeController {
     return commandGateway.send(
         ChangeEmployeeNameCommand.builder()
             .id(id)
-            .name(changeNameDto.getName())
+            .name(changeNameDto.name())
             .build()
     );
   }
