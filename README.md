@@ -22,11 +22,11 @@ Hello-world project: How to build a CQRS/ES hexagonal java microservice using Ax
 
 
 ### Local
-* [Java 11 SDK](https://www.oracle.com/java/technologies/downloads/#java11)
+* [Java 17 SDK](https://www.oracle.com/java/technologies/downloads/#java17)
 * [Maven](https://maven.apache.org/download.cgi)
 
 ### Docker
-* [Docker](https://www.docker.com/get-docker) (This is convenient, but you can also install cassandra and AxonServer locally)
+* [Docker](https://www.docker.com/get-docker) (This is convenient, but you can also install cassandra and AxonServer manually)
 
 ## Quick Start
 
