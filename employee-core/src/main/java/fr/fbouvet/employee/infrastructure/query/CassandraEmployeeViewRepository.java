@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.util.stream.Collectors.toList;
-
 @AllArgsConstructor
 @Repository
 public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
@@ -80,14 +78,14 @@ public class CassandraEmployeeViewRepository implements EmployeeViewRepository {
     public List<EmployeeView> findByName(String name) {
         return repositoryByName.findByName(name)
                 .map(this::toView)
-                .collect(toList());
+                .toList();
     }
 
     @Override
     public List<EmployeeView> findByBirthDate(LocalDate birthDate) {
         return repositoryByBirthDate.findByBirthDate(birthDate)
                 .map(this::toView)
-                .collect(toList());
+                .toList();
     }
 
     private EmployeeView toView(EmployeeById employeeById) {

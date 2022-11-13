@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
-import static java.util.stream.Collectors.toList;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.instanceOf;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.multipleInstancesOf;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
@@ -79,7 +78,7 @@ public class EmployeeController {
                 multipleInstancesOf(EmployeeView.class)
         ).map(employees -> employees.stream()
                 .map(this::toDto)
-                .collect(toList())
+                .toList()
         );
     }
 
@@ -93,7 +92,7 @@ public class EmployeeController {
                 multipleInstancesOf(EmployeeView.class)
         ).map(employees -> employees.stream()
                 .map(this::toDto)
-                .collect(toList())
+                .toList()
         );
     }
 
