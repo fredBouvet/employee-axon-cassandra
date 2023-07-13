@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class EmployeeTest {
 
@@ -28,49 +29,58 @@ class EmployeeTest {
     @Test
     void createEmployeeCommand_withMissingName_shouldThrowException() {
 
-        fixture.givenNoPriorActivity()
-                .when(
-                        CreateEmployeeCommand.builder()
-                                .id(randomUUID())
-                                .name(null)
-                                .address("42 example road")
-                                .email("toto@example.com")
-                                .birthDate(LocalDate.now().minusYears(21))
-                                .build()
-                )
-                .expectException(IllegalArgumentException.class);
+        try {
+            CreateEmployeeCommand.builder()
+                    .id(randomUUID())
+                    .name(null)
+                    .address("42 example road")
+                    .email("toto@example.com")
+                    .birthDate(LocalDate.now().minusYears(21))
+                    .build();
+
+            fail("IllegalArgumentException expected");
+
+        } catch (IllegalArgumentException e) {
+            // test ok
+        }
     }
 
     @Test
     void createEmployeeCommand_withMissingBirthDate_shouldThrowException() {
 
-        fixture.givenNoPriorActivity()
-                .when(
-                        CreateEmployeeCommand.builder()
-                                .id(randomUUID())
-                                .name("toto")
-                                .address("42 example road")
-                                .email("toto@example.com")
-                                .birthDate(null)
-                                .build()
-                )
-                .expectException(IllegalArgumentException.class);
+        try {
+            CreateEmployeeCommand.builder()
+                    .id(randomUUID())
+                    .name("toto")
+                    .address("42 example road")
+                    .email("toto@example.com")
+                    .birthDate(null)
+                    .build();
+
+            fail("IllegalArgumentException expected");
+
+        } catch (IllegalArgumentException e) {
+            // test ok
+        }
     }
 
     @Test
     void createEmployeeCommand_withBadEmail_shouldThrowException() {
 
-        fixture.givenNoPriorActivity()
-                .when(
-                        CreateEmployeeCommand.builder()
-                                .id(randomUUID())
-                                .name("toto")
-                                .address("42 example road")
-                                .email("Bad email")
-                                .birthDate(LocalDate.now().minusYears(21))
-                                .build()
-                )
-                .expectException(IllegalArgumentException.class);
+        try {
+            CreateEmployeeCommand.builder()
+                    .id(randomUUID())
+                    .name("toto")
+                    .address("42 example road")
+                    .email("Bad email")
+                    .birthDate(LocalDate.now().minusYears(21))
+                    .build();
+
+            fail("IllegalArgumentException expected");
+
+        } catch (IllegalArgumentException e) {
+            // test ok
+        }
     }
 
     @Test
@@ -117,19 +127,16 @@ class EmployeeTest {
 
         UUID id = randomUUID();
 
-        fixture.given(EmployeeCreatedEvent.builder()
-                        .id(id)
-                        .name("toto")
-                        .address("42 example road")
-                        .email("toto@example.com")
-                        .birthDate(LocalDate.now().minusYears(21))
-                        .build())
-                .when(
-                        ChangeEmployeeNameCommand.builder()
-                                .id(id)
-                                .build()
-                )
-                .expectException(IllegalArgumentException.class);
+        try {
+            ChangeEmployeeNameCommand.builder()
+                    .id(id)
+                    .build();
+
+            fail("IllegalArgumentException expected");
+
+        } catch (IllegalArgumentException e) {
+            // test ok
+        }
     }
 
     @Test

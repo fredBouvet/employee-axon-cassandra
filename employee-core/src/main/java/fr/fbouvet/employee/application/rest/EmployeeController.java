@@ -6,6 +6,7 @@ import fr.fbouvet.employee.api.query.FindEmployeeByBirthDateQuery;
 import fr.fbouvet.employee.api.query.FindEmployeeByIdQuery;
 import fr.fbouvet.employee.api.query.FindEmployeeByNameQuery;
 import fr.fbouvet.employee.api.query.model.EmployeeView;
+import fr.fbouvet.employee.api.query.model.EmployeeViews;
 import fr.fbouvet.employee.application.rest.dto.EmployeeChangeNameDto;
 import fr.fbouvet.employee.application.rest.dto.EmployeeCreationDto;
 import fr.fbouvet.employee.application.rest.dto.EmployeeDto;
@@ -22,7 +23,6 @@ import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 import static org.axonframework.messaging.responsetypes.ResponseTypes.instanceOf;
-import static org.axonframework.messaging.responsetypes.ResponseTypes.multipleInstancesOf;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 
 @AllArgsConstructor
@@ -75,8 +75,8 @@ public class EmployeeController {
 
         return queryGateway.query(
                 FindEmployeeByNameQuery.builder().name(name).build(),
-                multipleInstancesOf(EmployeeView.class)
-        ).map(employees -> employees.stream()
+                instanceOf(EmployeeViews.class)
+        ).map(employees -> employees.employees().stream()
                 .map(this::toDto)
                 .toList()
         );
@@ -89,8 +89,8 @@ public class EmployeeController {
 
         return queryGateway.query(
                 FindEmployeeByBirthDateQuery.builder().birthDate(birthDate).build(),
-                multipleInstancesOf(EmployeeView.class)
-        ).map(employees -> employees.stream()
+                instanceOf(EmployeeViews.class)
+        ).map(employees -> employees.employees().stream()
                 .map(this::toDto)
                 .toList()
         );

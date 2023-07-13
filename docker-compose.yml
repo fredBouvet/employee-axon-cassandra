@@ -3,7 +3,7 @@ services:
 #AxonServer     
   axon:
    container_name: axon
-   image: axoniq/axonserver:latest
+   image: axoniq/axonserver:latest-jdk-17-dev
    environment:
      - AXONIQ_AXONSERVER_DEVMODE_ENABLED=true
    ports:

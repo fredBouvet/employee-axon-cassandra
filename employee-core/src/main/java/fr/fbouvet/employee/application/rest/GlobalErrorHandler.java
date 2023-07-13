@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import org.axonframework.messaging.HandlerExecutionException;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import static org.springframework.http.MediaType.TEXT_PLAIN;
 @Configuration
 @Order(-2)
 @AllArgsConstructor
+@Log4j2
 public class GlobalErrorHandler implements ErrorWebExceptionHandler {
 
     private ObjectMapper objectMapper;
@@ -41,6 +43,9 @@ public class GlobalErrorHandler implements ErrorWebExceptionHandler {
         response.setStatusCode(INTERNAL_SERVER_ERROR);
         response.getHeaders().setContentType(TEXT_PLAIN);
         DataBuffer dataBuffer = bufferFactory.wrap("Unknown error".getBytes());
+
+        log.error(throwable.getMessage(), throwable);
+
         return response.writeWith(Mono.just(dataBuffer));
     }
 
