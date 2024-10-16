@@ -22,7 +22,7 @@ Hello-world project: How to build a CQRS/ES hexagonal java microservice using Ax
 
 
 ### Local
-* [Java 17 SDK](https://www.oracle.com/java/technologies/downloads/#java17)
+* [Java 21 SDK](https://www.oracle.com/java/technologies/downloads/#java21)
 * [Maven](https://maven.apache.org/download.cgi)
 
 ### Docker
