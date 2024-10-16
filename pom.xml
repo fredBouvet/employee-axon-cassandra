@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.1</version>
+        <version>3.3.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fr.fbouvet</groupId>
@@ -20,8 +20,8 @@
     <name>employee-axon-cassandra</name>
     <description>employee</description>
     <properties>
-        <java.version>17</java.version>
-        <axon.version>4.8.0</axon.version>
+        <java.version>21</java.version>
+        <axon.version>4.10.1</axon.version>
     </properties>
 
     <dependencies>
