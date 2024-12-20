@@ -5,11 +5,13 @@ import fr.fbouvet.employee.api.event.EmployeeNameChangedEvent;
 import fr.fbouvet.employee.api.query.model.EmployeeView;
 import fr.fbouvet.employee.domain.query.EmployeeViewRepository;
 import lombok.AllArgsConstructor;
+import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@ProcessingGroup("employee-projector")
 public class EmployeeProjector {
 
     private final EmployeeViewRepository repository;
